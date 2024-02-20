@@ -5,3 +5,18 @@ from django.http import HttpResponse
 
 def index(request):
     return render(request, 'shop/index.html')
+
+def about(request):
+    pass 
+
+def contact(request):
+    pass 
+
+def tracker(request):
+    pass 
+
+def prodView(request):
+    pass
+
+def checkout(request):
+    pass
