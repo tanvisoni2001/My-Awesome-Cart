@@ -19,6 +19,7 @@
         <div class="items">
             <ul class="list-group" id="items">
             </ul>
+            <span id="totalPrice"></span>
         </div>
     </div>  
     <div class="col my-4">
@@ -76,6 +77,8 @@
         cart  = JSON.parse(localStorage.getItem('cart'));
     }
     var sum = 0;
+    var totalPrice = 0;
+    var totalAmt = 0;
     if ($.isEmptyObject(cart)){
         mystr = `<span class = "cart-empty-msg">Your cart is empty. Please add some products for purchase. Happy Shopping!!!</span>`
         $('#items').append(mystr);
@@ -85,15 +88,25 @@
             let name = cart[item][1];
             let qty = cart[item][0];
             sum = sum + qty;
-            let amount = 'price'
+            itemPrice = cart[item][2];
+            totalPrice =  qty * itemPrice;
+            totalAmt += totalPrice;
             mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
                       ${name}
                       <span class="badge text-bg-primary rounded-pill">${qty}</span>
-                      <span class="badge text-bg-primary rounded-pill">${amount}</span>
-                    </li>`
-            $('#items').append(mystr)       
+                      <span class="badge text-bg-primary rounded-pill">${totalPrice}</span>
+                    </li>`     
+            $('#items').append(mystr)      
         }
+        price = `<li class="list-group-item d-flex justify-content-between align-items-center">
+            <span class = "cart-empty-msg">Total Price: </span>
+            <span class="badge text-bg-primary rounded-pill cart-empty-msg">${totalAmt}</span>
+          </li>` 
+
+        $('#totalPrice').append(price)   
+
     }   
+    document.getElementById('cart').innerHTML = totalPrice;
     document.getElementById('cart').innerHTML = sum;
     $('#itemJson').val(JSON.stringify(cart));
 </script>
