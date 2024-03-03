@@ -1,0 +1,107 @@
+{% extends 'shop/basic.html' %}
+{% load static %}
+
+{% block title %}
+<title>Checkout</title>
+{% endblock %}
+
+{% block css %}
+<style>
+    .cart-empty-msg{
+        background-color: greenyellow;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="col my-4">
+        <h3>Step - 1 My Awesome Cart Express Checkout - Review your items.</h3>
+        <div class="items">
+            <ul class="list-group" id="items">
+            </ul>
+        </div>
+    </div>  
+    <div class="col my-4">
+        <h3>Step-2 Enter your Address and other Details:</h3>
+        <form class="row g-3" method="post" action="{%url 'checkout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="itemJson" id="itemJson">
+            <div class="col-md-6">
+                <label for="inputname" class="form-label">Name</label>
+                <input type="name" class="form-control" name="name" id="name" placeholder="enter your name">
+            </div>
+            <div class="col-md-6">
+              <label for="inputEmail4" class="form-label">Email</label>
+              <input type="email" class="form-control" name="email" id="email" placeholder="enter your email">
+            </div>
+            <div class="col-md-4">
+                <label for="inputphone" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" name="phone" id="phone">
+            </div>
+            <div class="col-md -8">
+              <label for="inputAddress" class="form-label">Address</label>
+              <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St">
+            </div>
+            <div class="col-12">
+              <label for="inputAddress2" class="form-label">Address 2</label>
+              <input type="text" class="form-control" name="address_2" id="address_2" placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="col-md-6">
+              <label for="inputCity" class="form-label">City</label>
+              <input type="text" class="form-control" name="city" id="city">
+            </div>
+            <div class="col-md-4">
+                <label for="inputState" class="form-label">State</label>
+                <input type="text" class="form-control" name="state" id="state">
+            </div>
+            <div class="col-md-2">
+              <label for="inputZip" class="form-label">Zip</label>
+              <input type="text" class="form-control" name="zip_code" id="zip_code">
+            </div>
+            
+            <div class="col-12 my-3">
+              <button type="submit" class="btn btn-primary">Place Order</button>
+            </div>
+        </form>
+    </div>  
+</div>
+{% endblock %}
+
+{% block js%}
+<script>
+    if(localStorage.getItem('cart') == null){
+        var cart = {};
+    }
+    else {
+        cart  = JSON.parse(localStorage.getItem('cart'));
+    }
+    var sum = 0;
+    if ($.isEmptyObject(cart)){
+        mystr = `<span class = "cart-empty-msg">Your cart is empty. Please add some products for purchase. Happy Shopping!!!</span>`
+        $('#items').append(mystr);
+    }
+    else {
+        for(item in cart) {
+            let name = cart[item][1];
+            let qty = cart[item][0];
+            sum = sum + qty;
+            let amount = 'price'
+            mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
+                      ${name}
+                      <span class="badge text-bg-primary rounded-pill">${qty}</span>
+                      <span class="badge text-bg-primary rounded-pill">${amount}</span>
+                    </li>`
+            $('#items').append(mystr)       
+        }
+    }   
+    document.getElementById('cart').innerHTML = sum;
+    $('#itemJson').val(JSON.stringify(cart));
+</script>
+{% if thank %}
+<script>
+ alert('Thanks for shopping with us.. Your order id is {{id}}. Use the order id to track your order...');
+ localStorage.clear();
+ document.location = '/shop';
+</script>
+{% endif %}   
+{% endblock %}
