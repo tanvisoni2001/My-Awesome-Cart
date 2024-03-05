@@ -17,8 +17,8 @@ class Product(models.Model):
 class Contact(models.Model):
     msg_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length = 50, default = "")
-    email = models.EmailField(max_length = 50, unique = True)
-    phone = models.PositiveIntegerField(unique = True)
+    email = models.EmailField(max_length = 50)
+    phone = models.PositiveIntegerField()
     desc = models.CharField(max_length = 500, default = "")   
 
     def __str__(self):
@@ -35,6 +35,7 @@ class Order(models.Model):
     state = models.CharField(max_length = 50)
     zip_code = models.CharField(max_length = 6, blank = True)   
     phone = models.CharField(max_length = 10, default = "") 
+    amount = models.IntegerField(default = 0)
 
     def __str__(self):
         return self.name
